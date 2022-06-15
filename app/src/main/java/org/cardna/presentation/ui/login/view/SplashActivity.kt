@@ -1,26 +1,19 @@
 package org.cardna.presentation.ui.login.view
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat.finishAffinity
-import androidx.core.content.ContextCompat.startActivity
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.navercorp.nid.NaverIdLoginSDK
-import com.navercorp.nid.oauth.OAuthLoginCallback
 import dagger.hilt.android.AndroidEntryPoint
-import org.cardna.BuildConfig
 import org.cardna.R
 import org.cardna.data.local.singleton.CardNaRepository
 import org.cardna.databinding.ActivitySplashBinding
@@ -28,9 +21,7 @@ import org.cardna.presentation.MainActivity
 import org.cardna.presentation.base.BaseViewUtil
 import org.cardna.presentation.ui.login.viewmodel.LoginViewModel
 import org.cardna.presentation.util.StatusBarUtil
-import org.cardna.presentation.util.shortToast
 import timber.log.Timber
-import kotlin.math.absoluteValue
 
 
 @AndroidEntryPoint
@@ -80,22 +71,30 @@ class SplashActivity :
             ) { // 업데이트 가 있는 경우
                 Timber.e("인앱업데이트 있음")
 
-                val nowVersionCode = BuildConfig.VERSION_CODE // 현재 versionCode
-                val newVersionCode = appUpdateInfo.availableVersionCode() // 업데이트 버전의 versionCode
+                appUpdateManager.startUpdateFlowForResult( // 강제 업데이트 실행
+                    appUpdateInfo,
+                    AppUpdateType.IMMEDIATE,
+                    this,
+                    MY_REQUEST_CODE
+                )
 
-                if ((newVersionCode - nowVersionCode) >= 5) { // 강제 업데이트 할 정도로 큰 업데이트라면
-                    Timber.e("인앱업데이트 있는데 강제 업데이트")
-                    appUpdateManager.startUpdateFlowForResult( // 강제 업데이트 실행
-                        appUpdateInfo,
-                        AppUpdateType.IMMEDIATE,
-                        this,
-                        MY_REQUEST_CODE
-                    )
-                } else { //그게 아니라면
-                    // 선택적 업데이트이므로 아무 실행도 하지 않고, 다음 플로우로 앱 진행
-                    Timber.e("인앱업데이트 있는데 강제 업데이트 아님")
-                    setNextActivity()
-                }
+//                val nowVersionCode = BuildConfig.VERSION_CODE // 현재 versionCode
+//                val newVersionCode = appUpdateInfo.availableVersionCode() // 업데이트 버전의 versionCode
+//
+//                if ((newVersionCode - nowVersionCode) >= 5) { // 강제 업데이트 할 정도로 큰 업데이트라면
+//                    Timber.e("인앱업데이트 있는데 강제 업데이트")
+//                    appUpdateManager.startUpdateFlowForResult( // 강제 업데이트 실행
+//                        appUpdateInfo,
+//                        AppUpdateType.IMMEDIATE,
+//                        this,
+//                        MY_REQUEST_CODE
+//                    )
+//                } else { //그게 아니라면
+//                    // 선택적 업데이트이므로 아무 실행도 하지 않고, 다음 플로우로 앱 진행
+//                    Timber.e("인앱업데이트 있는데 강제 업데이트 아님")
+//                    setNextActivity()
+//                }
+
             } else { // 업데이트가 없는 경우
                 Timber.e("인앱업데이트 없음")
                 // 아무 실행도 하지 않고, 다음 플로우로 앱 진행
