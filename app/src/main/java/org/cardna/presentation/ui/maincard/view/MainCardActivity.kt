@@ -65,14 +65,12 @@ class MainCardActivity :
         //todo 친구 코드액티비티에서 받아서 저장하고 초기 데이터 뿌림
         val friendId = intent.getIntExtra("friendId", -1)
         val name = intent.getStringExtra("name") ?: ""
-     Log.e("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ친구정보세팅ㅡㅡㅡㅡ+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ","${friendId}+${name}")
         if(friendId!=-1) mainCardViewModel.setFriendNameAndId(name, friendId)
 
         mainCardViewModel.setFriendInfoSucccess.observe(this) {
             if (it) {
                 mainCardViewModel.getMainCardList(mainCardViewModel.friendId.value)
                 mainCardViewModel.getMainCardList(mainCardViewModel.friendId.value)
-                Log.e("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ친구정보옵저브해서 뿌림ㅡㅡㅡㅡ+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ","${mainCardViewModel.friendId.value}+${mainCardViewModel.friendId.value}")
             }
         }
 
@@ -120,7 +118,6 @@ class MainCardActivity :
     private fun setCardPackActivity() {
         //todo 친구 카드팩 액티비티로 가는 경우임
         binding.ivMaincardGotoCardpackBackground.setOnClickListener {
-            Log.e("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ친구카드팩에 가져가는 정보ㅡㅡㅡㅡ+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ","${mainCardViewModel.friendId.value}+${mainCardViewModel.friendId.value}")
             startActivity(
                 Intent(this, FriendCardPackActivity::class.java)
                     .putExtra(BaseViewUtil.ID, mainCardViewModel.friendId.value)

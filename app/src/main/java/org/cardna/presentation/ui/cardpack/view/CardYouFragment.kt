@@ -92,7 +92,6 @@ class CardYouFragment :
 
         // 2. 친구 카드너 엠티뷰 => 카드너 작성
         binding.ctlFriendEmptyMakeCardyou.setOnClickListener {
-            Log.e("ㅡㅡㅡㅡㅡㅡ버튼ㅡㅡㅡㅡㅡㅡ","${cardPackViewModel.id.value}+${cardPackViewModel.name}")
             val intent = Intent(requireActivity(), CardCreateActivity::class.java).apply {
                 putExtra(BaseViewUtil.IS_CARD_ME_OR_YOU, BaseViewUtil.CARD_YOU)
                 putExtra(BaseViewUtil.ID, cardPackViewModel.id.value)
