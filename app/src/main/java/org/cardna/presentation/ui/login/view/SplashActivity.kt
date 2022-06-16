@@ -14,6 +14,7 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
 import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.AndroidEntryPoint
+import org.cardna.BuildConfig
 import org.cardna.R
 import org.cardna.data.local.singleton.CardNaRepository
 import org.cardna.databinding.ActivitySplashBinding
@@ -71,29 +72,22 @@ class SplashActivity :
             ) { // 업데이트 가 있는 경우
                 Timber.e("인앱업데이트 있음")
 
-                appUpdateManager.startUpdateFlowForResult( // 강제 업데이트 실행
-                    appUpdateInfo,
-                    AppUpdateType.IMMEDIATE,
-                    this,
-                    MY_REQUEST_CODE
-                )
+                val nowVersionCode = BuildConfig.VERSION_CODE // 현재 versionCode
+                val newVersionCode = appUpdateInfo.availableVersionCode() // 업데이트 버전의 versionCode
 
-//                val nowVersionCode = BuildConfig.VERSION_CODE // 현재 versionCode
-//                val newVersionCode = appUpdateInfo.availableVersionCode() // 업데이트 버전의 versionCode
-//
-//                if ((newVersionCode - nowVersionCode) >= 5) { // 강제 업데이트 할 정도로 큰 업데이트라면
-//                    Timber.e("인앱업데이트 있는데 강제 업데이트")
-//                    appUpdateManager.startUpdateFlowForResult( // 강제 업데이트 실행
-//                        appUpdateInfo,
-//                        AppUpdateType.IMMEDIATE,
-//                        this,
-//                        MY_REQUEST_CODE
-//                    )
-//                } else { //그게 아니라면
-//                    // 선택적 업데이트이므로 아무 실행도 하지 않고, 다음 플로우로 앱 진행
-//                    Timber.e("인앱업데이트 있는데 강제 업데이트 아님")
-//                    setNextActivity()
-//                }
+                if ((newVersionCode - nowVersionCode) >= 5) { // 강제 업데이트 할 정도로 큰 업데이트라면
+                    Timber.e("인앱업데이트 있는데 강제 업데이트")
+                    appUpdateManager.startUpdateFlowForResult( // 강제 업데이트 실행
+                        appUpdateInfo,
+                        AppUpdateType.IMMEDIATE,
+                        this,
+                        MY_REQUEST_CODE
+                    )
+                } else { //그게 아니라면
+                    // 선택적 업데이트이므로 아무 실행도 하지 않고, 다음 플로우로 앱 진행
+                    Timber.e("인앱업데이트 있는데 강제 업데이트 아님")
+                    setNextActivity()
+                }
 
             } else { // 업데이트가 없는 경우
                 Timber.e("인앱업데이트 없음")
